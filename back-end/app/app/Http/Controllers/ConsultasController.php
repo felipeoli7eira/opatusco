@@ -14,7 +14,7 @@ class ConsultasController extends Controller
 {
     public function index(Request $request)
     {
-        return ClienteService::all();
+        return ConsultaService::all();
     }
 
     public function create()
@@ -26,17 +26,18 @@ class ConsultasController extends Controller
         return ConsultaService::create($request->all());
     }
 
-    public function show(int $clienteId)
+    public function show(int $consultaId)
     {
-        return ClienteService::find($clienteId);
+        return ConsultaService::find($consultaId);
     }
 
     public function edit(string $id)
     {
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $resourceId)
     {
+        return ConsultaService::update($request->all(), $resourceId);
     }
 
     public function destroy(string $id)

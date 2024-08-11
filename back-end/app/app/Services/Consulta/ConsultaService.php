@@ -19,23 +19,27 @@ abstract class ConsultaService
     public static function all(): JsonResponse
     {
         try {
-            $response = ClienteRepository::all();
+            $response = ConsultaRepository::loadModel()->with(['cliente', 'pet', 'medico'])->get();
         } catch (Throwable $throwable) {
             return ResponseHandle::sendError('Erro na operação', ['thMessage' => $throwable->getMessage()]);
         }
 
-        return ResponseHandle::sendResponse(message: 'Listagem de clientes', responseData: $response->all());
+        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $response->toArray());
     }
 
-    public static function find(int $clienteId): JsonResponse
+    public static function find(int $consultaId): JsonResponse
     {
         try {
-            $response = ClienteRepository::find($clienteId);
+            $response = ConsultaRepository::loadModel()
+                ->with(['cliente', 'pet', 'medico'])
+                ->where('id', $consultaId)
+                ->get()
+                ->first();
         } catch (Throwable $throwable) {
-            return ResponseHandle::sendError('Erro na operação', ['thMessage' => $throwable->getMessage()]);
+            return ResponseHandle::sendError('Erro', ['thMessage' => $throwable->getMessage()]);
         }
 
-        return ResponseHandle::sendResponse(message: 'Listagem de clientes', responseData: $response);
+        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $response);
     }
 
     public static function create(array $data): JsonResponse
@@ -63,9 +67,18 @@ abstract class ConsultaService
         return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $create->toArray(), httpCode: 201);
     }
 
-    // public function update(array $data, string $userUuid): JsonResponse
-    // {
-    // }
+    public static function update(array $data, int $resourceId): JsonResponse
+    {
+        try {
+            $consulta = ConsultaRepository::loadModel()->findOrFail($resourceId);
+            $consulta->update($data);
+            $updatedConsulta = $consulta->fresh();
+        } catch (Throwable $throwable) {
+            return ResponseHandle::sendError('Erro', ['thMessage' => $throwable->getMessage()]);
+        }
+
+        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $updatedConsulta, httpCode: 201);
+    }
 
     // public function delete(string $userUuid): JsonResponse
     // {
