@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\AuthRequestValidate;
 use App\Http\Requests\Clientes\CadastroClienteRequest;
 use App\Http\Requests\Usuarios\CadastroUsuarioRequest;
 use App\Services\Cliente\ClienteService;
@@ -60,5 +61,10 @@ class UsuariosController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function auth(AuthRequestValidate $request)
+    {
+        return UsuarioService::auth($request->validated());
     }
 }

@@ -1,19 +1,20 @@
 <script setup>
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/24/solid";
-import { RouterLink } from "vue-router";
-import useCep from "@/hooks/useCep"
+// import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/24/solid";
+// import { RouterLink } from "vue-router";
+// import useCep from "@/hooks/useCep"
 
-const {
-  cep,
-  requestIsRunning,
-  cepResponse,
-  handleSubmit
-} = useCep()
+// const {
+//   cep,
+//   requestIsRunning,
+//   cepResponse,
+//   handleSubmit
+// } = useCep()
 
 </script>
 
 <template>
-  <div id="get-cep-screen" class="h-screen w-screen bg-slate-200 dark:bg-neutral-900">
+  <p></p>
+  <!-- <div id="get-cep-screen" class="h-screen w-screen bg-slate-200 dark:bg-neutral-900">
     <div class="get-cep-screen-container h-screen mx-auto p-4 flex flex-col justify-between dark:bg-neutral-900">
       <header class="flex">
         <RouterLink :to="{ name: 'home' }" class="block p-2 rounded-full text-white bg-emerald-600 hover:bg-emerald-700 transition ease-in-out duration-300">
@@ -52,7 +53,7 @@ const {
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 

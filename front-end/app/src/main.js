@@ -9,8 +9,9 @@ import "vue-toastification/dist/index.css";
 // tailwind
 import './index.css'
 
-const app = createApp(App)
+import 'bootstrap/dist/css/bootstrap.css'
 
+const app = createApp(App)
 app.use(router)
 app.use(Toast, {})
 
