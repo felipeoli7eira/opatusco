@@ -1,33 +1,35 @@
 <?php
 
-namespace App\Services\Cliente;
+namespace App\Services\Pet;
 
 use App\Http\Utils\ResponseFormatHandler;
 use App\Http\Utils\ResponseHandle;
 use App\Interfaces\UserRepositoryInterface;
 use App\Repositories\ClienteRepository;
+use App\Repositories\PetRepository;
+use App\Repositories\PetTipoRepository;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
-abstract class ClienteService
+abstract class PetTipoService
 {
     public static function all(): JsonResponse
     {
         try {
-            $response = ClienteRepository::loadModel()->with(['pets'])->get()->toArray();
+            $response = PetTipoRepository::all()->toArray();
         } catch (Throwable $throwable) {
             return ResponseHandle::sendError('Erro', ['thMessage' => $throwable->getMessage()]);
         }
 
-        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $response);
+        return ResponseHandle::sendResponse(responseData: $response);
     }
 
     public static function find(int $clienteId): JsonResponse
     {
         try {
-            $response = ClienteRepository::loadModel()->find($clienteId)->with(['pets'])->first()->toArray();
+            $response = ClienteRepository::find($clienteId);
         } catch (Throwable $throwable) {
             return ResponseHandle::sendError('Erro na operação', ['thMessage' => $throwable->getMessage()]);
         }
@@ -38,12 +40,12 @@ abstract class ClienteService
     public static function create(array $data): JsonResponse
     {
         try {
-            $created = ClienteRepository::create($data);
+            $create = PetRepository::create($data);
         } catch (Throwable $throwable) {
             return ResponseHandle::sendError('Erro na operação', ['thMessage' => $throwable->getMessage()]);
         }
 
-        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $created->toArray(), httpCode: 201);
+        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $create->toArray(), httpCode: 201);
     }
 
     // public function update(array $data, string $userUuid): JsonResponse

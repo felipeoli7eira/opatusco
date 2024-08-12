@@ -15,7 +15,7 @@ class UsuariosController extends Controller
 {
     public function index(Request $request)
     {
-        return UsuarioService::all();
+        return UsuarioService::all($request);
     }
 
     /**

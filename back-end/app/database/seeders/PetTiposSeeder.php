@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\DB;
 class PetTiposSeeder extends Seeder
 {
     private array $tiposPet = [
-        'Cão',
+        'Cachorro',
         'Gato',
         'Pássaro',
         'Coelho',
-        'Outro'
+        'Hamster',
+        'Cobra',
+        'Tartaruga'
     ];
 
     public function run(): void

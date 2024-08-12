@@ -1,13 +1,14 @@
 import { useToast } from "vue-toastification";
 import { ref } from "vue";
 import http from "@/services/http.js";
-
-const toast = useToast();
+import { useRouter } from 'vue-router'
 
 export default function useLogin() {
     const requestIsRunning = ref(false);
-    const email = ref('me.felipeoliveira@gmail.com');
-    const senha = ref('senha');
+    const email = ref('recepcionista@opatusco.com');
+    const senha = ref('recepcionista');
+    const toast = useToast();
+    const router = useRouter()
 
     async function handleSubmit() {
         try {
@@ -23,6 +24,7 @@ export default function useLogin() {
             requestIsRunning.value = false
 
             saveCredentials(request.data.data)
+            router.push({ name: 'app_root' })
         } catch (error) {
             requestIsRunning.value = false
             console.log(error)

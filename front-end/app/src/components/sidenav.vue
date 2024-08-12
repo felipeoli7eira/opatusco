@@ -15,12 +15,18 @@
                     <span class="text-white">Meus atendimentos</span>
                 </router-link>
             </li>
+
+            <li class="nav-item mt-1">
+                <router-link :to="{ name: 'recepcionista.clientes' }" class="nav-link" aria-current="page">
+                    <span class="text-white">Clientes</span>
+                </router-link>
+            </li>
         </ul>
 
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="@/assets/img/svg/user-white.svg" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>Felipe</strong>
+                <strong>UserName</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                 <li>
@@ -35,10 +41,14 @@
 </template>
 
 <script setup>
+import useAuth from '@/hooks/useAuth'
 
-import http                    from '@/services/http.js'
+const {
+    logOut
+} = useAuth()
+// import http                    from '@/services/http.js'
 // import * as auth               from '@/services/auth.js'
-import { useToast }            from 'vue-toastification'
+// import { useToast }            from 'vue-toastification'
 // import { useRouter, useRoute } from 'vue-router'
 // import { useState }            from '@/store/user'
 // import { onMounted }           from 'vue'
@@ -55,30 +65,30 @@ import { useToast }            from 'vue-toastification'
 //     }
 // })
 
-async function logOut()
-{
-    try
-    {
-        const request = await http.post('/logout', undefined, {
-            headers: {
-                Authorization: 'Bearer '.concat(auth.getToken())
-            }
-        })
+// async function logOut()
+// {
+//     try
+//     {
+//         const request = await http.post('/logout', undefined, {
+//             headers: {
+//                 Authorization: 'Bearer '.concat(auth.getToken())
+//             }
+//         })
 
-        if (request?.status === 200 && request?.data?.success) {
-            auth.removeToken()
-            router.push({name: 'auth.login'})
-            return
-        }
+//         if (request?.status === 200 && request?.data?.success) {
+//             auth.removeToken()
+//             router.push({name: 'auth.login'})
+//             return
+//         }
 
-        toast.error(`Erro ao realizar logOut ${request?.data?.message}`)
-    }
-    catch (error)
-    {
-        console.log(error)
-        toast.error('Erro ao realizar logOut')
-    }
-}
+//         toast.error(`Erro ao realizar logOut ${request?.data?.message}`)
+//     }
+//     catch (error)
+//     {
+//         console.log(error)
+//         toast.error('Erro ao realizar logOut')
+//     }
+// }
 
 </script>
 

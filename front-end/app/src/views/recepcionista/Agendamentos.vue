@@ -1,36 +1,45 @@
 <script setup>
-
+import { onMounted } from 'vue'
 import useConsulta from '@/hooks/useConsulta'
+import usePet from '@/hooks/usePet'
 
-const { data, getRequestIsRunning } = useConsulta()
+const {
+  data,
+  getRequestIsRunning,
+  buscarConsultas
+} = useConsulta()
 
+const {
+  getTiposDePets,
+  tiposDePets
+} = usePet()
+
+onMounted(async () => {
+  await Promise.all([
+    buscarConsultas(),
+    getTiposDePets()
+  ])
+})
 </script>
 
 <template>
-  <div id="recepcionista" class="listagem-atendimentos">
-    <header class="flex justify-between">
-      <h2 class="text-white m-0">Agendamentos</h2>
-      <button class="btn btn-success">Novo agentamento</button>
+  <div>
+    <header class="mb-5 flex gap-3 items-center">
+        <h2 class="h2-responsive m-0 text-white font-thin">Agendamentos</h2>
     </header>
 
-    <div class="filters">
-      <form action="" class="row items-end">
+    <div class="mb-5">
+      <form class="row items-end">
         <div class="form-group col col-2">
-          <label for="" class="text-white">Tipo de animal</label>
-          <select class="form-control" name="" id="">
-            <option data="" type="">selecione</option>
-            <option data="" type="">Cão</option>
-            <option data="" type="">Gato</option>
+          <label for="" class="text-white mb-2 fw-bold">Tipo de pet</label>
+          <select class="form-control bg-dark text-white p-3">
+            <option v-for="(data, index) in tiposDePets" :value="data.nome" :key="index">{{ data.nome }}</option>
           </select>
         </div>
 
         <div class="form-group col col-2">
-          <label for="" class="text-white">Mês / Ano</label>
-          <input type="date" class="form-control" />
-        </div>
-
-        <div class="form-group col col-2">
-          <button class="btn btn-primary">Buscar</button>
+          <label for="" class="text-white mb-2 fw-bold">Data do agendamento</label>
+          <input type="date" class="form-control bg-dark text-white p-3" />
         </div>
       </form>
     </div>
@@ -40,35 +49,29 @@ const { data, getRequestIsRunning } = useConsulta()
       </div>
     </div>
 
-    <table v-else class="table table-striped table-dark mt-5">
+    <table v-else class="table table-app-rounded table-striped table-dark">
       <thead>
         <tr>
-          <th scope="col">Médico(a)</th>
-          <th scope="col">Cliente</th>
-          <th scope="col">Pet</th>
-          <!-- <th scope="col">Sintomas</th> -->
-          <th scope="col">Data</th>
-          <!-- <th scope="col">Período</th> -->
-          <th scope="col">Status</th>
-          <th scope="col">Solicitado em</th>
-          <!-- <th scope="col">Atualizado em</th> -->
-          <th scope="col"></th>
+          <th scope="col" class="p-3">Médico(a)</th>
+          <th scope="col" class="p-3">Cliente</th>
+          <th scope="col" class="p-3">Pet</th>
+          <th scope="col" class="p-3">Data</th>
+          <th scope="col" class="p-3">Status</th>
+          <th scope="col" class="p-3">Solicitado em</th>
+          <th scope="col" class="p-3"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(consulta, index) in data" :key="index">
-          <td>{{ consulta.medico.nome }}</td>
-          <td>{{ consulta.cliente.nome }}</td>
-          <td>{{ consulta.pet.nome }}</td>
-          <!-- <td>{{ consulta.sintomas }}</td> -->
-          <td>{{ consulta.data }}</td>
-          <!-- <td>{{ consulta.periodo === 'pm' ? 'Tarde': 'Manhã' }} ({{ consulta.data.split(' ').pop() }} {{ consulta.periodo }})</td> -->
-          <td>{{ consulta.status }}</td>
-          <td>{{ consulta.created_at }}</td>
-          <td>
+          <td class="p-3">{{ consulta.medico.nome }}</td>
+          <td class="p-3">{{ consulta.cliente.nome }}</td>
+          <td class="p-3">{{ consulta.pet.nome }}</td>
+          <td class="p-3">{{ consulta.data }}</td>
+          <td class="p-3">{{ consulta.status }}</td>
+          <td class="p-3">{{ consulta.created_at }}</td>
+          <td class="p-3">
             <router-link :to="{ name: 'recepcionista.detalhesConsulta', params: { id: consulta.id } }">Detalhes</router-link>
           </td>
-          <!-- <td>{{ consulta.updated_at }}</td> -->
         </tr>
       </tbody>
     </table>

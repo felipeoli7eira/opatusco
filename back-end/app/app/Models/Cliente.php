@@ -30,6 +30,6 @@ class Cliente extends Authenticatable
 
     public function pets(): HasMany
     {
-        return $this->hasMany(Pet::class, 'cliente_id', 'id');
+        return $this->hasMany(Pet::class);
     }
 }

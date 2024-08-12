@@ -42,6 +42,17 @@ const routes = [
         path: 'agendamentos/:id/detalhes',
         component: () => import('@/views/recepcionista/DetalhesConsulta.vue'),
         props: true
+      },
+      {
+        name: 'recepcionista.clientes',
+        path: 'clientes',
+        component: () => import('@/views/recepcionista/Clientes.vue'),
+      },
+      {
+        name: 'recepcionista.clientes.abrirConsulta',
+        path: 'clientes/:id/abrir-consulta',
+        component: () => import('@/views/recepcionista/ClienteAbrirConsulta.vue'),
+        props: true
       }
     ]
   }

@@ -1,12 +1,17 @@
 import { ref, onMounted } from 'vue'
 import http from '@/services/http'
+import { useToast } from 'vue-toastification'
 
 export default function useConsulta() {
 
     const data = ref([])
     const byIdData = ref({})
+    const novaConsultaPayload = ref({})
     const getRequestIsRunning = ref(false)
     const putRequestIsRunning = ref(false)
+    const postRequestIsRunning = ref(false)
+
+    const toast = useToast()
 
     async function buscarConsultas() {
         try {
@@ -14,12 +19,11 @@ export default function useConsulta() {
             const response = await http.get('/consultas')
             getRequestIsRunning.value = false
 
-            console.log(response.data.data)
-
             data.value = response.data.data
         } catch (error) {
             data.value = []
             getRequestIsRunning.value = false
+            toast.error('Erro ao listar os agendamentos');
         }
     }
 
@@ -40,23 +44,25 @@ export default function useConsulta() {
     async function atualizar() {
         try {
             const payload = {
-                data: byIdData.data,
-                periodo: byIdData.periodo,
-                sintomas: byIdData.sintomas,
-                medico_id: byIdData.medico_id,
-                pet_id: byIdData.pet_id,
-                status: byIdData.status
+                data: byIdData.value.data.replace('T', ' '),
+                periodo: byIdData.value.periodo,
+                sintomas: byIdData.value.sintomas,
+                medico_id: byIdData.value.medico_id,
+                pet_id: byIdData.value.pet_id,
+                status: byIdData.value.status
             }
 
-            console.log(payload)
+            putRequestIsRunning.value = true
+            const response = await http.put('/consultas/'.concat(byIdData.value.id), payload)
+            putRequestIsRunning.value = false
 
-            // putRequestIsRunning.value = true
-            // const response = await http.put('/consultas/'.concat(id), payload)
-            // putRequestIsRunning.value = false
+            await buscarConsultaPorId(byIdData.value.id)
 
-            // byIdData.value = response.data.data
+            console.clear()
+            console.log(response)
         } catch (error) {
             // byIdData.value = {}
+            console.log(error)
             putRequestIsRunning.value = false
         }
 
@@ -70,8 +76,28 @@ export default function useConsulta() {
 
     }
 
+    async function abrirConsuta() {
+        try {
+            const payload = novaConsultaPayload.value
+
+            payload.data = payload.data.replace('T', ' ')
+
+            postRequestIsRunning.value = true
+            await http.post('/consultas', payload)
+            postRequestIsRunning.value = false
+
+            toast.success('Consulta adicionada com sucesso', { timeout: 2000 });
+            novaConsultaPayload.value = {}
+        } catch (error) {
+            console.log(error)
+            postRequestIsRunning.value = false
+            toast.error('Erro ao cadastrar! verifique os campos e tente novamente', { timeout: 4000 });
+
+        }
+    }
+
     // onMounted(async () => {
-        buscarConsultas()
+        // buscarConsultas()
     // })
 
     return {
@@ -83,6 +109,10 @@ export default function useConsulta() {
         data,
         atualizar,
         putRequestIsRunning,
-        byIdData
+        byIdData,
+
+        abrirConsuta,
+        postRequestIsRunning,
+        novaConsultaPayload
     }
 }

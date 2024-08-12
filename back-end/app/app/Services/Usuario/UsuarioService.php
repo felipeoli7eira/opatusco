@@ -13,13 +13,21 @@ use Throwable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 abstract class UsuarioService
 {
-    public static function all(): JsonResponse
+    public static function all(Request $request): JsonResponse
     {
         try {
-            $response = UsuarioRepository::all();
+            if (!count($request->all())) {
+                $response = UsuarioRepository::all()->toArray();
+
+                return ResponseHandle::sendResponse(message: 'Listagem', responseData: $response);
+            }
+
+            $response = UsuarioRepository::loadModel()->where($request->all())->get();
+
         } catch (Throwable $throwable) {
             return ResponseHandle::sendError('Erro na operação', ['thMessage' => $throwable->getMessage()]);
         }

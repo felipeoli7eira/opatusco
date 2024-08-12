@@ -15,7 +15,7 @@ const {
 <template>
   <div class="h-screen w-screen flex gap-10 flex-col items-center justify-center p-5">
     <form class="flex flex-col items-center">
-      <img src="./../assets/img/svg/undraw_secure_login.svg" alt="asc" width="200px" class="mb-4" />
+      <img src="./../assets/img/png/pet.png" width="200" class="mb-4" />
 
       <div class="flex items-center mb-2 border p-1 px-4 bg-body rounded-pill">
         <img src="./../assets/img/svg/user.svg" />

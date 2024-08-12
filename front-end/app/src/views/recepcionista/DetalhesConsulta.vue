@@ -1,5 +1,7 @@
 <script setup>
   import useConsulta from '@/hooks/useConsulta'
+  import useMedico from '@/hooks/useMedico'
+
   import { onMounted } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -13,8 +15,11 @@
     putRequestIsRunning
   } = useConsulta()
 
+  const { medicos, getMedicos } = useMedico()
+
   onMounted(async () => {
     await buscarConsultaPorId(params.id)
+    await getMedicos()
   })
 </script>
 
@@ -24,7 +29,7 @@
       <h2 class="m-0 h2 h2-responsive text-white">Detalhes da consulta</h2>
     </header>
 
-    <div v-if="!getRequestIsRunning" class="container-fluid p-0">
+    <div v-if="!getRequestIsRunning && Object.keys(byIdData).length" class="container-fluid p-0">
       <form>
         <div class="row mb-3">
           <div class="col col-3">
@@ -34,12 +39,8 @@
             <input
               v-model="byIdData.cliente.nome"
               type="text"
-              id=""
               class="form-control bg-dark text-white"
-              placeholder=""
-              required
-              min="3"
-              max="191"
+              disabled
             />
           </div>
         </div>
@@ -51,13 +52,9 @@
           <div class="col col-9">
             <input
               v-model="byIdData.pet.nome"
-              id=""
               type="text"
               class="form-control bg-dark text-white"
-              placeholder=""
-              required
-              min="3"
-              max="191"
+              disabled
             />
           </div>
         </div>
@@ -68,12 +65,9 @@
           </div>
           <div class="col col-9">
             <input
-              :v-model="byIdData.data"
-              :value="byIdData.data"
-              id=""
+              v-model="byIdData.data"
               type="datetime-local"
               class="form-control bg-dark text-white"
-              required
             />
           </div>
         </div>
@@ -84,12 +78,9 @@
           </div>
           <div class="col col-9">
             <input
-              :v-model="byIdData.sintomas"
-              :value="byIdData.sintomas"
-              id=""
+              v-model="byIdData.sintomas"
               type="text"
               class="form-control bg-dark text-white"
-              required
             />
           </div>
         </div>
@@ -99,14 +90,10 @@
             <label for="password_input" class="m-0 text-white h-100 d-flex flex-col align-items-center">Período</label>
           </div>
           <div class="col col-9">
-            <input
-              :v-model="byIdData.periodo"
-              :value="byIdData.periodo"
-              id=""
-              type="text"
-              class="form-control bg-dark text-white"
-              required
-            />
+            <select v-model="byIdData.periodo"  class="form-control bg-dark text-white">
+              <option :selected="byIdData.periodo === 'am'" value="am">Manhã (am)</option>
+              <option :selected="byIdData.periodo === 'pm'" value="pm">Tarde/Noite (pm)</option>
+            </select>
           </div>
         </div>
 
@@ -115,14 +102,19 @@
             <label for="password_input" class="m-0 text-white h-100 d-flex flex-col align-items-center">Médico</label>
           </div>
           <div class="col col-9">
-            <input
+            <select class="form-control bg-dark text-light" v-model="byIdData.medico_id">
+              <option v-for="(medico, index) in medicos" :key="index" :value="medico.id" :selected="medico.id === byIdData.medico_id">
+                {{ medico.nome }}
+              </option>
+            </select>
+            <!-- <input
               :v-model="byIdData.medico.nome"
               :value="byIdData.medico.nome"
               id=""
               type="text"
               class="form-control bg-dark text-white"
               required
-            />
+            /> -->
           </div>
         </div>
 
@@ -131,14 +123,11 @@
             <label for="password_input" class="m-0 text-white h-100 d-flex flex-col align-items-center">Status</label>
           </div>
           <div class="col col-9">
-            <input
-              :v-model="byIdData.status"
-              :value="byIdData.status"
-              id=""
-              type="text"
-              class="form-control bg-dark text-white"
-              required
-            />
+            <select v-model="byIdData.status" class="form-control bg-dark text-white">
+              <option :selected="byIdData.status === 'solicitada'" value="solicitada">Solicitada</option>
+              <option :selected="byIdData.status === 'agendada'" value="agendada">Agendada</option>
+              <option :selected="byIdData.status === 'finalizada'" value="finalizada">Finalizada</option>
+            </select>
           </div>
         </div>
 
@@ -148,8 +137,8 @@
           </div>
           <div class="col col-9">
             <input
+              disabled
               :value="byIdData.created_at"
-              id=""
               type="datetime-local"
               class="form-control bg-dark text-white"
             />

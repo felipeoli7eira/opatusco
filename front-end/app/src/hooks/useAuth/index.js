@@ -1,4 +1,5 @@
 import http from '@/services/http'
+import { useRouter } from 'vue-router'
 
 export default function useAuth() {
     const tokenName = 'opatuscoAuth'
@@ -18,6 +19,7 @@ export default function useAuth() {
     function storeToken(tokenValue) {
         localStorage.setItem(tokenName, JSON.stringify(tokenValue))
     }
+
     async function guardApp(to, from) {
         try {
             const redirect = { name: 'login' }
@@ -36,10 +38,16 @@ export default function useAuth() {
           }
     }
 
+    function logOut() {
+        localStorage.removeItem(tokenName)
+        window.location.reload()
+    }
+
     return {
         hasAuthToken,
         getToken,
         storeToken,
-        guardApp
+        guardApp,
+        logOut
     }
 }

@@ -77,7 +77,7 @@ abstract class ConsultaService
             return ResponseHandle::sendError('Erro', ['thMessage' => $throwable->getMessage()]);
         }
 
-        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $updatedConsulta, httpCode: 201);
+        return ResponseHandle::sendResponse(message: 'Sucesso', responseData: $updatedConsulta, httpCode: Response::HTTP_OK);
     }
 
     // public function delete(string $userUuid): JsonResponse

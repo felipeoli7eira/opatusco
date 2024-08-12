@@ -17,7 +17,7 @@ class AgendamentoConsultaRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'data'       => ['required', 'date_format:Y-m-d H:i:s'],
+            'data'       => ['required', 'date_format:Y-m-d H:i'],
             'periodo'    => ['required', 'in:am,pm'],
             'sintomas'   => ['required', 'string', 'max:255', 'min:3'],
             'medico_id'  => ['required', 'exists:users,id'],
@@ -30,7 +30,7 @@ class AgendamentoConsultaRequest extends BaseRequest
     {
         return [
             'data.required'       => 'A data da consulta é obrigatória.',
-            'data.date_format'    => 'A data deve estar no formato válido: ano-mês-dia hora:minuto:segundo.',
+            'data.date_format'    => 'A data deve estar no formato válido: ano-mês-dia hora:minuto',
 
             'periodo.required'    => 'O período da consulta é obrigatório.',
             'periodo.in'          => 'O período deve ser "am" ou "pm".',

@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            PetTiposSeeder::class
+            PetTiposSeeder::class,
+            UserSeeder::class,
+            ClienteSeeder::class,
+            PetSeeder::class
         ]);
     }
 }
